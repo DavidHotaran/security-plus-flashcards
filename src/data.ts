@@ -1,6 +1,6 @@
-import { DataObject } from "./types";
+import { DataObjectArray } from "./types";
 
-export const data: DataObject = [
+export const data: DataObjectArray = [
   { key: "3DES", value: "Triple Digital Encryption Standard" },
   { key: "AAA", value: "Authentication, Authorization, and Accounting" },
   { key: "ABAC", value: "Attribute-based Access Control" },
