@@ -14,10 +14,8 @@ export default function App() {
     const keyPressed = (e: KeyboardEvent) => {
       if (e.key == "ArrowLeft") {
         if (activeCard == 0) {
-          console.log("==0");
           return;
         } else {
-          console.log("here");
           setActiveCard((num) => num - 1);
           setFlipped(false);
         }
