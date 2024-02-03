@@ -1,6 +1,10 @@
 import { data } from "./data";
 import { useState, useEffect, useRef } from "react";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  ChevronDownIcon,
+} from "@heroicons/react/24/outline";
 import { shuffleArray } from "./utils";
 import { DataObject, DataObjectArray } from "./types";
 
@@ -10,26 +14,31 @@ export default function App() {
   const [activeCard, setActiveCard] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [hidden, setHidden] = useState(true);
-  const [filerValue, setFilterValue] = useState("");
-  const ref = useRef<any>();
+  const [filterValue, setFilterValue] = useState("");
+  const [keyIndex, setKeyIndex] = useState(0);
+  const clickRef = useRef<any>();
+  const scrollRef = useRef<any>();
 
   const card: DataObject = data[activeCard];
   const filteredData: DataObjectArray = data.filter((item) =>
-    item.key.toLocaleLowerCase().startsWith(filerValue)
+    item.key.toLocaleLowerCase().startsWith(filterValue)
   );
 
+  // when a value from the dropdown is selected, set that as the active card
   const handleFilterClick = (item: DataObject) => {
     const idx = data.indexOf(item);
     setFilterValue(item.key);
     setActiveCard(idx);
   };
 
+  // hide the dropdown if user clicks outside the element
   const handleOutterClick = (e: any) => {
-    if (ref.current && !ref.current?.contains(e.target)) {
+    if (clickRef.current && !clickRef.current?.contains(e.target)) {
       setHidden(true);
     }
   };
 
+  // button onclick handler
   const handleClick = (direction: "left" | "right") => {
     if (direction == "left") {
       if (activeCard == 0) {
@@ -48,25 +57,46 @@ export default function App() {
     }
   };
 
-  useEffect(() => {
-    const keyPressed = (e: KeyboardEvent) => {
-      if (e.key == "ArrowLeft") {
+  // key press handler
+  const keyPressed = (e: KeyboardEvent) => {
+    switch (e.key) {
+      case "ArrowLeft":
         handleClick("left");
-      } else if (e.key == "ArrowRight") {
+        break;
+      case "ArrowRight":
         handleClick("right");
-      } else if (e.key == " ") {
+        break;
+      case " ": //space bar
         e.preventDefault();
         setFlipped((f) => !f);
-      }
-    };
+        break;
+      case "ArrowDown":
+        if (keyIndex === filteredData.length - 1) return;
+        setKeyIndex((i) => ++i);
+        scrollRef.current.scrollBy(0, 24);
+        break;
+      case "ArrowUp":
+        if (keyIndex === 0) return;
+        setKeyIndex((i) => --i);
+        scrollRef.current.scrollBy(0, -24);
+        break;
+      case "Enter":
+        setFilterValue(filteredData[keyIndex].key);
+        setActiveCard(keyIndex);
+        break;
+      default:
+        break;
+    }
+  };
 
+  useEffect(() => {
     document.addEventListener("keydown", keyPressed);
     document.addEventListener("click", handleOutterClick);
     return () => {
       document.removeEventListener("keydown", keyPressed);
       document.removeEventListener("click", handleOutterClick);
     };
-  }, [handleClick, handleOutterClick]);
+  }, [handleClick, handleOutterClick, keyPressed]);
 
   return (
     <div className="flex flex-col min-h-screen  bg-slate-900 text-white">
@@ -84,23 +114,31 @@ export default function App() {
                 Card: {activeCard + 1} / {data.length}
               </span>
               <div>
-                <div className="relative">
+                <div className="relative" ref={clickRef}>
                   <input
-                    className="text-black"
+                    className="text-black rounded-md p-1 outline-none ring-2 ring-gray-500 focus:ring-blue-400 relative"
                     onClick={() => setHidden((h) => !h)}
                     onChange={(e) => setFilterValue(e.target.value)}
-                    value={filerValue}
-                    ref={ref}
+                    value={filterValue}
+                    placeholder="Search..."
+                  />
+                  <ChevronDownIcon
+                    className="h-6 w-6 absolute top-1 right-1 stroke-slate-500"
+                    onClick={() => setHidden((h) => !h)}
                   />
                   <div
                     className={`${
                       hidden && "hidden"
-                    } absolute right-0 top-6 border-2 border-blue-500 w-full h-fit max-h-64 overflow-y-auto`}
+                    } absolute right-0 top-6  border-blue-500 w-full h-fit max-h-64 overflow-y-auto`}
+                    ref={scrollRef}
                   >
-                    {filteredData.map((item) => {
+                    {filteredData.map((item, idx) => {
                       return (
                         <p
-                          className="bg-white text-black cursor-pointer hover:bg-slate-300 hover:text-white"
+                          className={`bg-white text-black cursor-pointer hover:bg-slate-300 hover:text-white px-2 ${
+                            idx === keyIndex &&
+                            "border-2 border-blue-400 bg-slate-300 text-white"
+                          }`}
                           key={item.key}
                           onClick={() => handleFilterClick(item)}
                         >
