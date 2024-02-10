@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { FlashCards, Ports } from "./components";
-import { cards, ports } from "./data";
+import { cards } from "./data";
 import { shuffleArray } from "./utils";
 
 shuffleArray(cards);
