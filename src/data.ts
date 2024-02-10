@@ -1,6 +1,6 @@
-import { DataObjectArray } from "./types";
+import { DataObjectArray, PortObjectArray } from "./types";
 
-export const data: DataObjectArray = [
+export const cards: DataObjectArray = [
   { key: "3DES", value: "Triple Digital Encryption Standard" },
   { key: "AAA", value: "Authentication, Authorization, and Accounting" },
   { key: "ABAC", value: "Attribute-based Access Control" },
@@ -356,4 +356,77 @@ export const data: DataObjectArray = [
   { key: "XOR", value: "Exclusive Or" },
   { key: "XSRF", value: "Cross-Site Request Forgery" },
   { key: "XSS", value: "Cross-Site Scripting" },
+];
+
+export const ports: PortObjectArray = [
+  {
+    "unsecure protocol": "DNS",
+    "original port": "UDP/TCP 53",
+    "secure protocol": "DNSSEC",
+    "secure port": "UDP/TCP 53",
+    notes: "",
+  },
+  {
+    "unsecure protocol": "FPT",
+    "original port": "TCP 21 AND 20",
+    "secure protocol": "FTPS",
+    "secure port": "TPC 21 EXPLICIT MODE 990 IMPLICIT MODE FTPS",
+    notes: "USING TLS",
+  },
+  {
+    "unsecure protocol": "FPT",
+    "original port": "TCP 21 AND 20",
+    "secure protocol": "SFTP",
+    "secure port": "TCP 22 (SSH)",
+    notes: "USING SSH",
+  },
+  {
+    "unsecure protocol": "HTTP",
+    "original port": "TCP 80",
+    "secure protocol": "HTTPS",
+    "secure port": "TCP 443",
+    notes: "USING TSL",
+  },
+  {
+    "unsecure protocol": "IMAP",
+    "original port": "TCP 143",
+    "secure protocol": "IMAPS",
+    "secure port": "TCP 993",
+    notes: "USING TSL",
+  },
+  {
+    "unsecure protocol": "LDAP",
+    "original port": "UDP AND TCP 389",
+    "secure protocol": "LDAPS",
+    "secure port": "TCP 636",
+    notes: "USING TSL",
+  },
+  {
+    "unsecure protocol": "POP3",
+    "original port": "TCP 100",
+    "secure protocol": "POP3",
+    "secure port": "TCP 995",
+    notes: "USING TSL",
+  },
+  {
+    "unsecure protocol": "RTP",
+    "original port": "UDP 16384-32767",
+    "secure protocol": "SRTP",
+    "secure port": "UDP 5004",
+    notes: "",
+  },
+  {
+    "unsecure protocol": "SNMP",
+    "original port": "UDP 161/162",
+    "secure protocol": "SNMPv3",
+    "secure port": "UDP 161/162",
+    notes: "",
+  },
+  {
+    "unsecure protocol": "TELNET",
+    "original port": "TCP 23",
+    "secure protocol": "SSH",
+    "secure port": "TCP 22",
+    notes: "",
+  },
 ];
